@@ -1,14 +1,11 @@
-# 第一部分：基礎設定
-port: 7890
-socks-port: 7891
+mixed-port: 7890
 allow-lan: true
 mode: rule
 log-level: info
-unified-delay: true
+ipv6: false
 
-# 第二部分：節點定義
 proxies:
-  - name: "TW_Node"
+  - name: "TW_Trojan"
     type: trojan
     server: tw01.fflink.cc
     port: 443
@@ -25,14 +22,12 @@ proxies:
     password: "123"
     udp: true
 
-# 第三部分：代理分組
 proxy-groups:
-  - name: "Chain_Proxy"
+  - name: "CHAIN"
     type: relay
     proxies:
-      - "TW_Node"
+      - "TW_Trojan"
       - "SK5_Final"
 
-# 第四部分：規則設定
 rules:
-  - MATCH, "Chain_Proxy"
+  - MATCH, "CHAIN"
