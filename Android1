@@ -14,18 +14,19 @@ dns:
     - 114.114.114.114
     - 8.8.8.8
 
-proxy-providers:
-  fflink-sub:
-    type: http
-    url: "https://a02.fflink.cc/api/v1/client/subscribe?token=35f52f25e464a21c35a77b199ea831c5"
-    interval: 3600
-    path: ./fflink.yaml
-    health-check:
-      enable: true
-      interval: 600
-      url: http://www.gstatic.com/generate_204
-
 proxies:
+  # 1. 台灣 Trojan 節點 (手動填入)
+  # 請打開您的訂閱內容，把「台湾 TW-01」的伺服器位址和密碼填進去
+  - name: "台湾 TW-01"
+    type: trojan
+    server: 這裡填入伺服器位址(例如 tw01.fflink.cc)
+    port: 443
+    password: 這裡填入密碼
+    udp: true
+    sni: 這裡填入SNI(通常跟server一樣)
+    skip-cert-verify: true
+
+  # 2. 您的 SK5 落地節點
   - name: "SK5_落地出口"
     type: socks5
     server: 220.132.60.157
@@ -35,19 +36,12 @@ proxies:
     udp: true
 
 proxy-groups:
-  # 代理鏈：流量會依序經過「中轉入口」和「SK5_落地出口」
+  # 代理鏈邏輯
   - name: "UDP轉發鏈路"
     type: relay
     proxies:
-      - "中轉入口"
+      - "台湾 TW-01"
       - "SK5_落地出口"
-
-  # 從訂閱中過濾出台灣節點
-  - name: "中轉入口"
-    type: select
-    use:
-      - fflink-sub
-    filter: "台湾 TW-01"
 
 rules:
   - MATCH, UDP轉發鏈路
