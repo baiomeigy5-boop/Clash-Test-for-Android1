@@ -1,5 +1,14 @@
+# 第一部分：基礎設定
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+unified-delay: true
+
+# 第二部分：節點定義
 proxies:
-  - name: TW_Entrance
+  - name: "TW_Node"
     type: trojan
     server: tw01.fflink.cc
     port: 443
@@ -8,20 +17,22 @@ proxies:
     sni: tw01.fflink.cc
     skip-cert-verify: true
 
-  - name: SK5_Exit
+  - name: "SK5_Final"
     type: socks5
     server: 220.132.60.157
     port: 31670
     username: "lan"
     password: "123"
     udp: true
-    dialer-proxy: TW_Entrance # 核心：直接指定透過 TW 節點發出請求
 
+# 第三部分：代理分組
 proxy-groups:
-  - name: FINAL_GROUP
-    type: select
+  - name: "Chain_Proxy"
+    type: relay
     proxies:
-      - SK5_Exit
+      - "TW_Node"
+      - "SK5_Final"
 
+# 第四部分：規則設定
 rules:
-  - MATCH, FINAL_GROUP
+  - MATCH, "Chain_Proxy"
