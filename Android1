@@ -1,133 +1,48 @@
-mixed-port: 7890
-allow-lan: false
-mode: global
+port: 7890
+socks-port: 7891
+mixed-port: 7893
+allow-lan: true
+mode: rule
 log-level: info
+ipv6: false
+udp: true # 強制開啟 UDP
 
-tun:
-  enable: true
-  stack: gvisor
-  auto-route: true
-  auto-detect-interface: true
+# 1. 訂閱連結管理 (自動抓取您的節點)
+proxy-providers:
+  fflink-sub:
+    type: http
+    url: "https://a02.fflink.cc/api/v1/client/subscribe?token=35f52f25e464a21c35a77b199ea831c5"
+    interval: 3600
+    path: ./fflink.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.gstatic.com/generate_204
 
 proxies:
-  - name: SK5
+  # 2. 您的 SK5 落地節點 (手動填寫)
+  - name: "SK5_落地出口"
     type: socks5
     server: 220.132.60.157
     port: 31670
     username: "lan"
     password: "123"
-
-  # 台灣節點
-  - name: 台湾 TW-1
-    type: vmess
-    server: example1.tw
-    port: 443
-    uuid: YOUR_UUID_1
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-2
-    type: vmess
-    server: example2.tw
-    port: 443
-    uuid: YOUR_UUID_2
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-3
-    type: vmess
-    server: example3.tw
-    port: 443
-    uuid: YOUR_UUID_3
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-4
-    type: vmess
-    server: example4.tw
-    port: 443
-    uuid: YOUR_UUID_4
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-5
-    type: vmess
-    server: example5.tw
-    port: 443
-    uuid: YOUR_UUID_5
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-6
-    type: vmess
-    server: example6.tw
-    port: 443
-    uuid: YOUR_UUID_6
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-7
-    type: vmess
-    server: example7.tw
-    port: 443
-    uuid: YOUR_UUID_7
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-8
-    type: vmess
-    server: example8.tw
-    port: 443
-    uuid: YOUR_UUID_8
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-9
-    type: vmess
-    server: example9.tw
-    port: 443
-    uuid: YOUR_UUID_9
-    alterId: 0
-    cipher: auto
-    tls: true
-  - name: 台湾 TW-10
-    type: vmess
-    server: example10.tw
-    port: 443
-    uuid: YOUR_UUID_10
-    alterId: 0
-    cipher: auto
-    tls: true
+    udp: true
 
 proxy-groups:
-  - name: TW-Nodes
-    type: url-test
-    proxies:
-      - 台湾 TW-1
-      - 台湾 TW-2
-      - 台湾 TW-3
-      - 台湾 TW-4
-      - 台湾 TW-5
-      - 台湾 TW-6
-      - 台湾 TW-7
-      - 台湾 TW-8
-      - 台湾 TW-9
-      - 台湾 TW-10
-    url: "http://www.gstatic.com/generate_204"
-    interval: 300
-
-  - name: Relay
+  # 代理鏈邏輯：自動從訂閱找「台湾 TW-01」 -> 串接 SK5
+  - name: "UDP轉發鏈路"
     type: relay
     proxies:
-      - TW-Nodes
-      - SK5
+      - "中轉入口"
+      - "SK5_落地出口"
 
-  - name: Proxy
+  # 利用篩選功能，只抓取名稱包含 "台湾 TW-01" 的節點
+  - name: "中轉入口"
     type: select
-    proxies:
-      - Relay
-      - TW-Nodes
-      - DIRECT
+    use:
+      - fflink-sub
+    filter: "台湾 TW-01"
 
 rules:
-  - MATCH,Proxy
+  - MATCH, UDP轉發鏈路
