@@ -29,29 +29,26 @@ proxies:
     password: 123
 
 proxy-groups:
-  # 台灣節點（只抓TW）
-  - name: 🇹🇼 台灣節點
+  - name: TW-Nodes
     type: url-test
     use:
       - mysub
-    filter: "(?i)tw|taiwan|台"
+    filter: "(?i)tw|taiwan"
     url: http://www.gstatic.com/generate_204
     interval: 300
 
-  # 中轉鏈（核心）
-  - name: 🔗 中轉鏈
+  - name: Relay
     type: relay
     proxies:
-      - 🇹🇼 台灣節點
+      - TW-Nodes
       - SK5
 
-  # 最終出口
-  - name: 🌐 全局
+  - name: Proxy
     type: select
     proxies:
-      - 🔗 中轉鏈
-      - 🇹🇼 台灣節點
+      - Relay
+      - TW-Nodes
       - DIRECT
 
 rules:
-  - MATCH,🌐 全局
+  - MATCH,Proxy
