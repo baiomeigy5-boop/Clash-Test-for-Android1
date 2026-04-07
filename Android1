@@ -10,7 +10,6 @@ tun:
   auto-detect-interface: true
 
 proxies:
-  # SK5
   - name: SK5
     type: socks5
     server: 220.132.60.157
@@ -18,22 +17,84 @@ proxies:
     username: "lan"
     password: "123"
 
-  # 訂閱節點（你可以用 provider 自動更新生成的節點）
-  # 這裡示範幾個台灣節點名稱作為例子
-  - name: TW-Node1
+  # 台灣節點
+  - name: 台湾 TW-1
     type: vmess
-    server: example.tw1.com
+    server: example1.tw
     port: 443
-    uuid: 你的UUID
+    uuid: YOUR_UUID_1
     alterId: 0
     cipher: auto
     tls: true
-
-  - name: TW-Node2
+  - name: 台湾 TW-2
     type: vmess
-    server: example.tw2.com
+    server: example2.tw
     port: 443
-    uuid: 你的UUID
+    uuid: YOUR_UUID_2
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-3
+    type: vmess
+    server: example3.tw
+    port: 443
+    uuid: YOUR_UUID_3
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-4
+    type: vmess
+    server: example4.tw
+    port: 443
+    uuid: YOUR_UUID_4
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-5
+    type: vmess
+    server: example5.tw
+    port: 443
+    uuid: YOUR_UUID_5
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-6
+    type: vmess
+    server: example6.tw
+    port: 443
+    uuid: YOUR_UUID_6
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-7
+    type: vmess
+    server: example7.tw
+    port: 443
+    uuid: YOUR_UUID_7
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-8
+    type: vmess
+    server: example8.tw
+    port: 443
+    uuid: YOUR_UUID_8
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-9
+    type: vmess
+    server: example9.tw
+    port: 443
+    uuid: YOUR_UUID_9
+    alterId: 0
+    cipher: auto
+    tls: true
+  - name: 台湾 TW-10
+    type: vmess
+    server: example10.tw
+    port: 443
+    uuid: YOUR_UUID_10
     alterId: 0
     cipher: auto
     tls: true
@@ -42,8 +103,16 @@ proxy-groups:
   - name: TW-Nodes
     type: url-test
     proxies:
-      - TW-Node1
-      - TW-Node2
+      - 台湾 TW-1
+      - 台湾 TW-2
+      - 台湾 TW-3
+      - 台湾 TW-4
+      - 台湾 TW-5
+      - 台湾 TW-6
+      - 台湾 TW-7
+      - 台湾 TW-8
+      - 台湾 TW-9
+      - 台湾 TW-10
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
