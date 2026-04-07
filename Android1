@@ -9,18 +9,8 @@ tun:
   auto-route: true
   auto-detect-interface: true
 
-proxy-providers:
-  mysub:
-    type: http
-    url: "https://a02.fflink.cc/api/v1/client/subscribe?token=a82921fe732a4256b89ad837b444565e"
-    interval: 3600
-    path: ./mysub.yaml
-    health-check:
-      enable: true
-      interval: 300
-      url: "http://www.gstatic.com/generate_204"
-
 proxies:
+  # SK5
   - name: SK5
     type: socks5
     server: 220.132.60.157
@@ -28,12 +18,32 @@ proxies:
     username: "lan"
     password: "123"
 
+  # 訂閱節點（你可以用 provider 自動更新生成的節點）
+  # 這裡示範幾個台灣節點名稱作為例子
+  - name: TW-Node1
+    type: vmess
+    server: example.tw1.com
+    port: 443
+    uuid: 你的UUID
+    alterId: 0
+    cipher: auto
+    tls: true
+
+  - name: TW-Node2
+    type: vmess
+    server: example.tw2.com
+    port: 443
+    uuid: 你的UUID
+    alterId: 0
+    cipher: auto
+    tls: true
+
 proxy-groups:
   - name: TW-Nodes
     type: url-test
     proxies:
-      - mysub
-    filter: "(?i)tw|taiwan"
+      - TW-Node1
+      - TW-Node2
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
