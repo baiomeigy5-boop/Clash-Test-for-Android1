@@ -25,7 +25,7 @@ proxies:
     type: socks5
     server: 220.132.60.157
     port: 31670
-    username: lan
+    username: "lan"
     password: "123"
 
 proxy-groups:
