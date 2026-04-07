@@ -1,5 +1,5 @@
 proxies:
-  - name: "TW_Trojan"
+  - name: TW_Entrance
     type: trojan
     server: tw01.fflink.cc
     port: 443
@@ -8,20 +8,20 @@ proxies:
     sni: tw01.fflink.cc
     skip-cert-verify: true
 
-  - name: "SK5_Final"
+  - name: SK5_Exit
     type: socks5
     server: 220.132.60.157
     port: 31670
     username: "lan"
     password: "123"
     udp: true
+    dialer-proxy: TW_Entrance # 核心：直接指定透過 TW 節點發出請求
 
 proxy-groups:
-  - name: "UDP轉發鏈路"
-    type: relay
+  - name: FINAL_GROUP
+    type: select
     proxies:
-      - "TW_Trojan"
-      - "SK5_Final"
+      - SK5_Exit
 
 rules:
-  - MATCH, "UDP轉發鏈路"
+  - MATCH, FINAL_GROUP
