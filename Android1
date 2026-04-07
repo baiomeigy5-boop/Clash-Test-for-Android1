@@ -18,7 +18,7 @@ proxy-providers:
     health-check:
       enable: true
       interval: 300
-      url: http://www.gstatic.com/generate_204
+      url: "http://www.gstatic.com/generate_204"
 
 proxies:
   - name: SK5
@@ -26,15 +26,15 @@ proxies:
     server: 220.132.60.157
     port: 31670
     username: lan
-    password: 123
+    password: "123"
 
 proxy-groups:
   - name: TW-Nodes
     type: url-test
-    use:
+    proxies:
       - mysub
     filter: "(?i)tw|taiwan"
-    url: http://www.gstatic.com/generate_204
+    url: "http://www.gstatic.com/generate_204"
     interval: 300
 
   - name: Relay
