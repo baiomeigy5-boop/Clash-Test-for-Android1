@@ -5,9 +5,15 @@ allow-lan: true
 mode: rule
 log-level: info
 ipv6: false
-udp: true # 強制開啟 UDP
+udp: true
 
-# 1. 訂閱連結管理 (自動抓取您的節點)
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+
 proxy-providers:
   fflink-sub:
     type: http
@@ -20,7 +26,6 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
 
 proxies:
-  # 2. 您的 SK5 落地節點 (手動填寫)
   - name: "SK5_落地出口"
     type: socks5
     server: 220.132.60.157
@@ -30,14 +35,14 @@ proxies:
     udp: true
 
 proxy-groups:
-  # 代理鏈邏輯：自動從訂閱找「台湾 TW-01」 -> 串接 SK5
+  # 代理鏈：流量會依序經過「中轉入口」和「SK5_落地出口」
   - name: "UDP轉發鏈路"
     type: relay
     proxies:
       - "中轉入口"
       - "SK5_落地出口"
 
-  # 利用篩選功能，只抓取名稱包含 "台湾 TW-01" 的節點
+  # 從訂閱中過濾出台灣節點
   - name: "中轉入口"
     type: select
     use:
