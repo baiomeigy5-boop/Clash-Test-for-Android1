@@ -1,22 +1,57 @@
-port: 7890
-socks-port: 7891
-allow-lan: true
-mode: rule
+mixed-port: 7890
+allow-lan: false
+mode: global
 log-level: info
+
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  auto-detect-interface: true
+
+proxy-providers:
+  mysub:
+    type: http
+    url: "https://a02.fflink.cc/api/v1/client/subscribe?token=a82921fe732a4256b89ad837b444565e"
+    interval: 3600
+    path: ./mysub.yaml
+    health-check:
+      enable: true
+      interval: 300
+      url: http://www.gstatic.com/generate_204
+
 proxies:
-  - name: "我的SOCKS5節點"
+  - name: SK5
     type: socks5
     server: 220.132.60.157
     port: 31670
     username: lan
-    password: "123"
-    udp: true
+    password: 123
+
 proxy-groups:
-  - name: 🚀 節點選擇
+  # 台灣節點（只抓TW）
+  - name: 🇹🇼 台灣節點
+    type: url-test
+    use:
+      - mysub
+    filter: "(?i)tw|taiwan|台"
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+  # 中轉鏈（核心）
+  - name: 🔗 中轉鏈
+    type: relay
+    proxies:
+      - 🇹🇼 台灣節點
+      - SK5
+
+  # 最終出口
+  - name: 🌐 全局
     type: select
     proxies:
-      - "我的SOCKS5節點"
+      - 🔗 中轉鏈
+      - 🇹🇼 台灣節點
       - DIRECT
+
 rules:
-  - GEOIP,LAN,DIRECT
-  - MATCH,🚀 節點選擇
+  - MATCH,🌐 全局
