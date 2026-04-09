@@ -1,6 +1,4 @@
-# Generated for Clash Verge - 電腦版專用
-# 訂閱源已更新，節點篩選：01-10
-
+# Generated for Clash Verge - 電腦版修正版
 mode: rule
 mixed-port: 7897
 socks-port: 7898
@@ -35,13 +33,11 @@ dns:
 proxy-providers:
   shanhuyun:
     type: http
-    # 已更新為新的訂閱連結
+    # 已更新為您最新的連結
     url: "https://scdy03.scsub.com/apiv2/evwhndbve8y6cdxx?clash=1&extend=1"
     interval: 0
     path: ./providers/airport.yaml
-    header:
-      User-Agent: "ClashMeta"
-    # 在源頭先過濾掉非新加坡與日本的節點，讓列表更乾淨
+    # 移除容易報錯的 header 區塊，確保兼容性
     filter: "(?i)新加坡|日本"
     health-check:
       enable: true
