@@ -1,36 +1,6 @@
-# Generated for Clash Verge - Windows 穩定版
-# 適用於主板機控制端電腦
-
-mode: global
+mode: rule  # 1. 改為 rule 模式，畫面會比較乾淨
 mixed-port: 7897
-socks-port: 7898
-port: 7899
-allow-lan: true
-log-level: info
-external-controller: 127.0.0.1:9097
-
-tun:
-  enable: true
-  stack: system
-  device: Meta
-  auto-route: true
-  strict-route: true
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53
-  mtu: 1500
-
-dns:
-  enable: true
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  nameserver:
-    - 1.1.1.1
-    - 8.8.8.8
-  fake-ip-filter:
-    - dns.msftncsi.com
-    - www.msftncsi.com
-    - www.msftconnecttest.com
+# ... 前面設定保持不變 ...
 
 proxy-providers:
   shanhuyun:
@@ -38,32 +8,32 @@ proxy-providers:
     url: "https://scdy03.scsub.com/apiv2/7ckvsf9lws3zxztu?clash=1&extend=1"
     interval: 0
     path: ./providers/airport.yaml
-    # 增加 Header 模擬 Clash，避免被機場判定為非法抓取
     header:
       User-Agent: "ClashMeta"
+    # 2. 在源頭就先過濾，只抓取「新加坡」或「日本」開頭的節點
+    filter: "(?i)新加坡|日本" 
     health-check:
       enable: true
       url: "https://www.gstatic.com/generate_204"
       interval: 300
 
 proxy-groups:
-# 🇸🇬 新加坡 - 篩選 01 到 10
 - name: 🇸🇬 新加坡
   type: fallback
   use: [shanhuyun]
-  filter: "新加坡-(0[1-9]|10)"
+  # 這裡保留精確篩選 01-10
+  filter: "新加坡-(0[1-9]|10)$"
   url: "https://www.gstatic.com/generate_204"
   interval: 15
 
-# 🇯🇵 日本 - 篩選 01 到 10
 - name: 🇯🇵 日本
   type: fallback
   use: [shanhuyun]
-  filter: "日本-(0[1-9]|10)"
+  # 這裡保留精確篩選 01-10
+  filter: "日本-(0[1-9]|10)$"
   url: "https://www.gstatic.com/generate_204"
   interval: 15
 
-# 🚀 出口選擇
 - name: 🚀 Proxy
   type: select
   proxies:
