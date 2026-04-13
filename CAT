@@ -33,9 +33,7 @@ dns:
 proxy-providers:
   shanhuyun:
     type: http
-    # 已更新為您最新的訂閱連結
     url: "https://resourcemap.lol/sub?token=ufxu1TWXl81teDy-acfELFE1LMAEAp0QbiFXbDw--Lw&type=clash&protocol=ss2022&use=foreign&rule=default"
-    # 設定為 0，禁用定時自動更新
     interval: 0
     path: ./providers/shanhuyun.yaml
     health-check:
@@ -44,31 +42,28 @@ proxy-providers:
       interval: 300
 
 proxy-groups:
-# 🇸🇬 新加坡 - 自動選擇延遲最低節點，每 30 秒檢測一次
-- name: 🇸🇬 新加坡
-  type: url-test
-  use: [shanhuyun]
-  filter: "Singapore 0[1-5]"
-  url: "https://www.gstatic.com/generate_204"
-  interval: 30
-  tolerance: 50
+  - name: 🇸🇬 新加坡
+    type: url-test
+    use: [shanhuyun]
+    filter: "Singapore 0[1-5]"
+    url: "https://www.gstatic.com/generate_204"
+    interval: 30
+    tolerance: 50
 
-# 🇯🇵 日本 - 自動選擇延遲最低節點，每 30 秒檢測一次
-- name: 🇯🇵 日本
-  type: url-test
-  use: [shanhuyun]
-  filter: "Japan 0[1-5]"
-  url: "https://www.gstatic.com/generate_204"
-  interval: 30
-  tolerance: 50
+  - name: 🇯🇵 日本
+    type: url-test
+    use: [shanhuyun]
+    filter: "Japan 0[1-5]"
+    url: "https://www.gstatic.com/generate_204"
+    interval: 30
+    tolerance: 50
 
-# 🚀 出口選擇
-- name: 🚀 Proxy
-  type: select
-  proxies:
-  - 🇸🇬 新加坡
-  - 🇯🇵 日本
-  - DIRECT
+  - name: 🚀 Proxy
+    type: select
+    proxies:
+      - 🇸🇬 新加坡
+      - 🇯🇵 日本
+      - DIRECT
 
 rules:
-- MATCH,🚀 Proxy
+  - MATCH,🚀 Proxy
