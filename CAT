@@ -1,3 +1,4 @@
+# Generated for Clash Verge - 2026-04-13 手動優化版
 mode: rule
 mixed-port: 7897
 socks-port: 7898
@@ -32,6 +33,7 @@ dns:
 proxy-providers:
   shanhuyun:
     type: http
+    # 使用您要求的第二次訂閱連結
     url: "https://resourcemap.lol/sub?token=ufxu1TWXl81teDy-acfELFE1LMAEAp0QbiFXbDw--Lw&type=clash&protocol=ss2022&use=foreign&rule=default"
     interval: 0
     path: ./providers/shanhuyun.yaml
@@ -41,7 +43,7 @@ proxy-providers:
       interval: 300
 
 proxy-groups:
-  - name: "🇸🇬 新加坡"
+  - name: 🇸🇬 新加坡
     type: url-test
     use: [shanhuyun]
     filter: "Singapore 0[1-5]"
@@ -49,7 +51,7 @@ proxy-groups:
     interval: 30
     tolerance: 50
 
-  - name: "🇯🇵 日本"
+  - name: 🇯🇵 日本
     type: url-test
     use: [shanhuyun]
     filter: "Japan 0[1-5]"
@@ -57,12 +59,6 @@ proxy-groups:
     interval: 30
     tolerance: 50
 
-  - name: "🚀 Proxy"
+  - name: 🚀 Proxy
     type: select
-    proxies:
-      - "🇸🇬 新加坡"
-      - "🇯🇵 日本"
-      - DIRECT
-
-rules:
-  - MATCH,🚀 Proxy
+    prox
