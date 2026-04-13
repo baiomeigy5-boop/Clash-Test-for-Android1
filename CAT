@@ -1,4 +1,4 @@
-# Generated for Clash Verge - 2026-04-11 N2 GY6
+# Generated for Clash Verge - 2026-04-11 V2 GY6
 mode: rule
 mixed-port: 7897
 socks-port: 7898
@@ -63,4 +63,12 @@ proxy-groups:
   tolerance: 50
 
 # 🚀 出口選擇
-- name:
+- name: 🚀 Proxy
+  type: select
+  proxies:
+  - 🇸🇬 新加坡
+  - 🇯🇵 日本
+  - DIRECT
+
+rules:
+- MATCH,🚀 Proxy
