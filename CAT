@@ -34,7 +34,7 @@ proxy-providers:
   shanhuyun:
     type: http
     # 使用您要求的第二次訂閱連結
-    url: "https://resourcemap.lol/sub?token=ufxu1TWXl81teDy-acfELFE1LMAEAp0QbiFXbDw--Lw&type=clash&protocol=ss2022&use=foreign&rule=default"
+    url: "https://resourcemap.lol/sub?token=ca1B7tcnwvX6oUdY0ylgvfkMOyOXhRgcOZdFrVeNGdo&type=clash&protocol=ss2022&use=domestic&rule=default"
     interval: 0
     path: ./providers/shanhuyun.yaml
     health-check:
