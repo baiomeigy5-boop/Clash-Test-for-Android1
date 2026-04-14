@@ -1,22 +1,83 @@
+# ==========================================================
+# Clash Verge 完整優化設定檔 - 2026-04-14
+# 適用於：主板機集群、手機自動化、高品質網路環境
+# ==========================================================
+
 mode: rule
+mixed-port: 7897
+socks-port: 7898
+port: 7899
 allow-lan: true
 log-level: info
-mixed-port: 7897
+external-controller: 127.0.0.1:9097
 
-proxies:
-  - name: "手動測試節點"
-    type: ss
-    server: 1.1.1.1
-    port: 8388
-    cipher: aes-256-gcm
-    password: "password"
+# TUN 模式設定（確保主板機所有 App 流量都能接管）
+tun:
+  enable: true
+  stack: system
+  device: Meta
+  auto-route: true
+  strict-route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+  mtu: 1500
 
+# DNS 優化
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
+  fake-ip-filter:
+    - dns.msftncsi.com
+    - www.msftncsi.com
+    - www.msftconnecttest.com
+
+# 遠端節點訂閱（已更新為你的新連結）
+proxy-providers:
+  shanhuyun:
+    type: http
+    url: "https://resourcemap.lol/sub?token=A2e2bn7CCO5-lZB_TZVx2St8D6TFAAbao4gOESG1ucs&type=clash&protocol=ss2022&use=domestic&rule=default"
+    interval: 3600
+    path: ./providers/shanhuyun.yaml
+    health-check:
+      enable: true
+      url: "https://www.gstatic.com/generate_204"
+      interval: 300
+
+# 策略組（自動挑選最快節點）
 proxy-groups:
+  - name: 🇸🇬 新加坡
+    type: url-test
+    use: [shanhuyun]
+    filter: "Singapore|新加坡"
+    url: "https://www.gstatic.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  - name: 🇯🇵 日本
+    type: url-test
+    use: [shanhuyun]
+    filter: "Japan|日本"
+    url: "https://www.gstatic.com/generate_204"
+    interval: 300
+    tolerance: 50
+
   - name: 🚀 Proxy
     type: select
     proxies:
-      - "手動測試節點"
+      - 🇸🇬 新加坡
+      - 🇯🇵 日本
       - DIRECT
 
+# 分流規則
 rules:
+  # 區域網路流量直接連接
+  - GEOIP,LAN,DIRECT
+  # 中國大陸流量直接連接（節省流量）
+  - GEOIP,CN,DIRECT
+  # 其餘流量走 Proxy 組
   - MATCH,🚀 Proxy
