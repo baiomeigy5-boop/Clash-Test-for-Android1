@@ -1,6 +1,5 @@
 # ==========================================================
-# Clash Verge 完整優化設定檔 - 2026-04-14
-# 適用於：主板機集群、手機自動化、高品質網路環境
+# Clash Verge 完整優化設定檔 - 最終版
 # ==========================================================
 
 mode: rule
@@ -11,7 +10,7 @@ allow-lan: true
 log-level: info
 external-controller: 127.0.0.1:9097
 
-# TUN 模式設定（確保主板機所有 App 流量都能接管）
+# TUN 模式
 tun:
   enable: true
   stack: system
@@ -23,7 +22,7 @@ tun:
     - any:53
   mtu: 1500
 
-# DNS 優化
+# DNS 設定
 dns:
   enable: true
   enhanced-mode: fake-ip
@@ -36,32 +35,32 @@ dns:
     - www.msftncsi.com
     - www.msftconnecttest.com
 
-# 遠端節點訂閱（已更新為你的新連結）
+# 訂閱來源
 proxy-providers:
-  shanhuyun:
+  mysub:
     type: http
-    url: "https://resourcemap.lol/sub?token=A2e2bn7CCO5-lZB_TZVx2St8D6TFAAbao4gOESG1ucs&type=clash&protocol=ss2022&use=domestic&rule=default"
+    url: "https://ccyz.vpjs.de/link-c?token=f0daa37a50d85f26e62d89521d37a28f"
     interval: 3600
-    path: ./providers/shanhuyun.yaml
+    path: ./providers/mysub.yaml
     health-check:
       enable: true
       url: "https://www.gstatic.com/generate_204"
       interval: 300
 
-# 策略組（自動挑選最快節點）
+# 策略組
 proxy-groups:
   - name: 🇸🇬 新加坡
     type: url-test
-    use: [shanhuyun]
-    filter: "Singapore|新加坡"
+    use: [mysub]
+    filter: "Singapore|新加坡|SG"
     url: "https://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
 
   - name: 🇯🇵 日本
     type: url-test
-    use: [shanhuyun]
-    filter: "Japan|日本"
+    use: [mysub]
+    filter: "Japan|日本|JP"
     url: "https://www.gstatic.com/generate_204"
     interval: 300
     tolerance: 50
@@ -75,9 +74,6 @@ proxy-groups:
 
 # 分流規則
 rules:
-  # 區域網路流量直接連接
   - GEOIP,LAN,DIRECT
-  # 中國大陸流量直接連接（節省流量）
   - GEOIP,CN,DIRECT
-  # 其餘流量走 Proxy 組
   - MATCH,🚀 Proxy
