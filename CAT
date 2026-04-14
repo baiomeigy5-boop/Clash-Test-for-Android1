@@ -33,9 +33,8 @@ dns:
 proxy-providers:
   shanhuyun:
     type: http
-    # 使用您要求的第二次訂閱連結
     url: "https://resourcemap.lol/sub?token=ca1B7tcnwvX6oUdY0ylgvfkMOyOXhRgcOZdFrVeNGdo&type=clash&protocol=ss2022&use=domestic&rule=default"
-    interval: 0
+    interval: 3600
     path: ./providers/shanhuyun.yaml
     health-check:
       enable: true
@@ -48,7 +47,7 @@ proxy-groups:
     use: [shanhuyun]
     filter: "Singapore 0[1-5]"
     url: "https://www.gstatic.com/generate_204"
-    interval: 30
+    interval: 300
     tolerance: 50
 
   - name: 🇯🇵 日本
@@ -56,9 +55,16 @@ proxy-groups:
     use: [shanhuyun]
     filter: "Japan 0[1-5]"
     url: "https://www.gstatic.com/generate_204"
-    interval: 30
+    interval: 300
     tolerance: 50
 
   - name: 🚀 Proxy
     type: select
-    prox
+    proxies:
+      - 🇸🇬 新加坡
+      - 🇯🇵 日本
+      - DIRECT
+
+rules:
+  - GEOIP,CN,DIRECT
+  - MATCH,🚀 Proxy
